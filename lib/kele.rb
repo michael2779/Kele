@@ -36,4 +36,24 @@ require './lib/roadmap.rb'
       @mentor_parse = JSON.parse(response.body)
     end
 
+    def get_messages(page=nil)
+
+      address_mentor = 'https://www.bloc.io/api/v1/message_threads'
+      response = self.class.get(address_mentor, values: {"page" => page}, headers: { "authorization" => @auth })
+      @message_parse = JSON.parse(response.body)
+    end
+
+
+    def create_message(sender, recipient_id, token, subject, message)
+     response = self.class.post("https://www.bloc.io/api/v1/messages", values: {sender: sender, recipient_id: recipient_id, token: token, subject: subject, "stripped-text" => message}, headers: {"authorization" => @auth})
+     case response.code
+       when 200
+         puts "Great job, It is up and running!"
+       when 404
+         puts "Sorry! Try again."
+       when 500...600
+         puts "ERROR #{response.code}"
+     end
+    end
+
   end
