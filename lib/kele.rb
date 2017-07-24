@@ -69,4 +69,17 @@ require './lib/roadmap.rb'
         @checkpoint = JSON.parse(response.body)
   end
 
+  def update_submission(id, assign_branch, assign_commit_link, check_id, assign_comment, enroll_id)
+    response = self.class.put("https://www.bloc.io/api/v1/checkpoint_submissions/#{id}",
+      headers: { "authorization" => @auth },
+      body: {
+        "assignment_branch" => assign_branch,
+        "assignment_commit_link" => assign_commit_link,
+        "checkpoint_id" => check_id,
+        "comment" => assign_comment,
+        "enrollment_id" => enroll_id
+      })
+    @update_check = JSON.parse(response.body)
+  end
+
 end
